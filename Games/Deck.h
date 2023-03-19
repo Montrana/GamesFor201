@@ -1,6 +1,8 @@
 #pragma once
 #include "Games.h"
+
 #include "WarHand.h"
+#include "BJ_Hand.h"
 
 class Deck {
 private: 
@@ -11,7 +13,6 @@ public:
 
 	void shuffle();
 	void print();
-	void warDeal(int cardsToDeal, WarHand& playerHand, WarHand& compHand);
-	void bjDeal(int cardsToDeal, WarHand& playerHand, WarHand& compHand);
+	void deal(int cardsToDeal, list<card>& hand);
 };
 

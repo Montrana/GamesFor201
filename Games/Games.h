@@ -7,6 +7,8 @@
 #include <list>
 #include <algorithm>
 #include <random>
+
+
 using namespace std;
 
 struct card {
@@ -23,6 +25,8 @@ const char CLUB = '\x05';
 const char SPADE = '\x06';
 
 const char SUITS[4] = { HEART, DIAMOND, CLUB, SPADE };
+
+const int STANDARD_DECK_SIZE = 52;
 
 void blackjack();
 void craps();

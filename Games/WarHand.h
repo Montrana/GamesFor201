@@ -6,12 +6,15 @@ class WarHand
 private:
 	list<card> hand;
 	int totalCards;
+	int totalValue;
 
 public:
 	WarHand(list<card> _cards);
 
-	void addCard(card _card);
+	int getTotalCards();
+	int getTotalValue();
+
+	void addCards(list<card> _cardsWon);
 	bool showCard(card& cardToShow);
-	void wonCards(list<card> _cardsWon);
 };
 

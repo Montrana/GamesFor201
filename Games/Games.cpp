@@ -1,4 +1,7 @@
 #include "Games.h"
+#include "Deck.h"
+#include "WarHand.h"
+#include "BJ_Hand.h"
 
 void blackjack() {
 
@@ -34,7 +37,30 @@ void ticTacToe() {
 
 }
 void war() {
+    Deck deck;
+    list<card> tempPlayerHand, tempCompHand;
 
+    deck.shuffle();
+    deck.deal(STANDARD_DECK_SIZE / 2, tempPlayerHand);
+    deck.deal(STANDARD_DECK_SIZE / 2, tempCompHand);
+
+    WarHand playerHand(tempPlayerHand);
+    WarHand compHand(tempCompHand);
+
+    cout << "Player: " << playerHand.getTotalValue() << endl;
+    card tempCard;
+    while (playerHand.showCard(tempCard))
+    {
+        printCard(tempCard);
+        cout << endl;
+    }
+    cout << endl;
+    cout << "Computer: " << compHand.getTotalValue() << endl;
+    while (compHand.showCard(tempCard))
+    {
+        printCard(tempCard);
+        cout << endl;
+    }
 }
 
 //For Craps:

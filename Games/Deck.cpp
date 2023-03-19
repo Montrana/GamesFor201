@@ -24,11 +24,19 @@ void Deck::print() {
     }
 }
 
-void Deck::warDeal(int cardsToDeal, WarHand& playerHand, WarHand& compHand)
-{
 
-}
-void Deck::bjDeal(int cardsToDeal, WarHand& playerHand, WarHand& compHand)
+void Deck::deal(int cardsToDeal, list<card>& hand)
 {
-
+    if (cardsToDeal <= deckOfCards.size())
+    {
+        for (int i = 0; i < cardsToDeal; i++)
+        {
+            hand.push_front(deckOfCards.back());
+            deckOfCards.pop_back();
+        }
+    }
+    else
+    {
+        throw runtime_error("Not enough cards in deck.");
+    }
 }

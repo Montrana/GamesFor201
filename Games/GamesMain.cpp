@@ -6,20 +6,7 @@
 
 int main()
 {
-    Deck deck = Deck();
-    
-    deck.print();
-    cout << endl;
-    deck.shuffle();
-    deck.print();
-
-    cout << endl;
-    deck.shuffle();
-    deck.print();
-
-    cout << endl;
-    deck.shuffle();
-    deck.print();
+    war();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
