@@ -8,6 +8,7 @@ Deck::Deck() {
         tempCard.suit = SUITS[s];
         for (int f = 2; f <= 14; f++) {
             tempCard.faceNum = f;
+            tempCard.value = f;
             deckOfCards.push_back(tempCard);
         }
     }

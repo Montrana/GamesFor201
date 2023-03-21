@@ -6,7 +6,6 @@ WarHand::WarHand(list<card> _cards) {
 	totalValue = 0;
 	for (card _card : hand)
 	{
-		_card.value = _card.faceNum;
 		totalValue += _card.value;
 	}
 }

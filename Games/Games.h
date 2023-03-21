@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <random>
 
+//#include "WarHand.h"
+
 
 using namespace std;
 
@@ -32,8 +34,9 @@ void blackjack();
 void craps();
 void hangman();
 void ticTacToe();
-void war();
+void warGame();
 
 int rollDie();
-
+//void warInitiated(list<card>& wonCards, WarHand& playerHand, WarHand& compHand);
+//void showCards(list<card>& wonCards, WarHand& playerHand, WarHand& compHand, card& playerCard, card& compCard);
 void printCard(card _card);
