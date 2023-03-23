@@ -6,7 +6,15 @@
 
 int main()
 {
-    warGame();
+    hangman();
+    /*try
+    {
+        warGame();
+    }
+    catch (exception err)
+    {
+        cout << err.what();
+    }*/
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

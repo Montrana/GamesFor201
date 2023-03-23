@@ -7,10 +7,9 @@
 #include <list>
 #include <algorithm>
 #include <random>
+#include <fstream>
 
 //#include "WarHand.h"
-
-
 using namespace std;
 
 struct card {
@@ -30,6 +29,9 @@ const char SUITS[4] = { HEART, DIAMOND, CLUB, SPADE };
 
 const int STANDARD_DECK_SIZE = 52;
 
+const string PLAYER_LOST = "You Lost!";
+const string PLAYER_WON = "You Won!";
+
 void blackjack();
 void craps();
 void hangman();
@@ -37,6 +39,5 @@ void ticTacToe();
 void warGame();
 
 int rollDie();
-//void warInitiated(list<card>& wonCards, WarHand& playerHand, WarHand& compHand);
-//void showCards(list<card>& wonCards, WarHand& playerHand, WarHand& compHand, card& playerCard, card& compCard);
+string setRandomWord();
 void printCard(card _card);

@@ -12,7 +12,7 @@ void showCards(list<card>& wonCards, WarHand& playerHand, WarHand& compHand, car
     }
     else
     {
-        throw runtime_error("Player Lost");
+        throw runtime_error(PLAYER_LOST);
         return;
     }
     if (compHand.showCard(compCard))
@@ -23,7 +23,7 @@ void showCards(list<card>& wonCards, WarHand& playerHand, WarHand& compHand, car
     }
     else
     {
-        throw runtime_error("Computer Lost");
+        throw runtime_error(PLAYER_WON);
         return;
     }
     wonCards.push_back(playerCard);
@@ -47,7 +47,7 @@ void warInitiated(list<card>& wonCards, WarHand& playerHand, WarHand& compHand)
     }
     else
     {
-        throw runtime_error("Player Lost");
+        throw runtime_error(PLAYER_LOST);
         return;
     }
     if (compHand.showCard(compCard))
@@ -57,7 +57,7 @@ void warInitiated(list<card>& wonCards, WarHand& playerHand, WarHand& compHand)
     }
     else
     {
-        throw runtime_error("Computer Lost");
+        throw runtime_error(PLAYER_WON);
         return;
     }
 
@@ -98,9 +98,9 @@ void blackjack() {
 void craps() {
     int dieSum = rollDie();
     if (dieSum == 7 || dieSum == 11)
-        cout << "You win!\n";
+        cout << PLAYER_WON << endl;
     else if (dieSum == 2 || dieSum == 3 || dieSum == 12)
-        cout << "You lose!\n";
+        cout << PLAYER_LOST << endl;
     else
     {
         int point = dieSum;
@@ -111,16 +111,73 @@ void craps() {
         }
         if (dieSum == 7)
         {
-            cout << "You lose!\n";
+            cout << PLAYER_LOST << endl;
         }
         else if (dieSum == point)
         {
-            cout << "You win!\n";
+            cout << PLAYER_WON << endl;
         }
     }
 }
 void hangman() {
+    string correctWord = setRandomWord();
+    int guessesLeft = 6;
+    vector <char> lettersGuessed;
+    string guessWord = correctWord;
+    for (int i = 0; i < correctWord.size(); i ++)
+    {
+        guessWord[i] = '?';
+    }
+    cout << "This is the word you need to guess: " << guessWord << endl;
+    cout << "You have " << guessesLeft << " guesses left.\n";
 
+    do
+    {
+        string guessInput;
+        cout << "What is your guess? ";
+        cin >> guessInput;
+        char guess = tolower(guessInput[0]);
+        if (!isalpha(guess))
+        {
+            cout << "Invalid input, please enter a letter.\n";
+            continue;
+        }
+        for (char guessTried : lettersGuessed)
+        {
+            if (guess == guessTried)
+            {
+                cout << "You have already guessed that letter, please enter a different one.\n";
+                continue;
+            }
+        }
+        lettersGuessed.push_back(guess);
+        if (correctWord.find(guess) != string::npos)
+        {
+            for (int i = 0; i < correctWord.size(); i++)
+            {
+                if (guess == correctWord[i])
+                {
+                    guessWord[i] = guess;
+                }
+            }
+            cout << "Correct!\n";
+        }
+        else
+        {
+            cout << "Incorrect!\n";
+            guessesLeft--;
+        }
+        cout << "This is the word you need to guess: " << guessWord << endl;
+        cout << "You have " << guessesLeft << " guesses left.\n";
+    } while (guessesLeft > 0 && correctWord != guessWord);
+    if (guessesLeft == 0)
+    {
+        cout << PLAYER_LOST << " The word was: " << correctWord << endl;
+    }
+    else
+    {
+        cout << PLAYER_WON << endl;
+    }
 }
 void ticTacToe() {
 
@@ -136,21 +193,6 @@ void warGame() {
 
     WarHand playerHand(tempPlayerHand);
     WarHand compHand(tempCompHand);
-
-    /*cout << "Player: " << playerHand.getTotalValue() << endl;
-    card tempCard;
-    while (playerHand.showCard(tempCard))
-    {
-        printCard(tempCard);
-        cout << endl;
-    }
-    cout << endl;
-    cout << "Computer: " << compHand.getTotalValue() << endl;
-    while (compHand.showCard(tempCard))
-    {
-        printCard(tempCard);
-        cout << endl;
-    }*/
 
     card playerCard;
     card compCard;
@@ -214,6 +256,26 @@ int rollDie()
     return dieSum;
 }
 
+string setRandomWord()
+{
+    srand(time(0));
+    ifstream inFile;
+    inFile.open("words.txt");
+    if (!inFile.is_open())
+    {
+        cout << "Unable to open input file\n";
+        return " ";
+    }
+    string word;
+    vector<string> wordList;
+
+    while (inFile >> word) {
+        wordList.push_back(word);
+    }
+    int wordNum = rand() % wordList.size();
+    inFile.close();
+    return wordList[wordNum];
+}
 
 /// <summary>
 /// Prints a card with the appropriate suit, value and color. 
