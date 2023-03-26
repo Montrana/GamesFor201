@@ -6,7 +6,8 @@
 
 int main()
 {
-    hangman();
+    //hangman();
+    ticTacToe();
     /*try
     {
         warGame();

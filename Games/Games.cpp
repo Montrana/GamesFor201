@@ -180,7 +180,29 @@ void hangman() {
     }
 }
 void ticTacToe() {
-
+    srand(time(0));
+    
+    char theBoard[3][3] = { {'1', '2', '3'},
+                            {'4', '5', '6'},
+                            {'7', '8', '9'}};
+    vector<vector<coordinates>> winningCombos;
+    generateWinningCombos(winningCombos);
+    bool playerWin;
+    bool coinFlip = rand() % 2;
+    while (!checkWin(theBoard, winningCombos, playerWin))
+    {
+        printBoard(theBoard);
+        playerMove(theBoard);
+    }
+    printBoard(theBoard);
+    if (playerWin)
+    {
+        cout << PLAYER_WON << endl;
+    }
+    else
+    {
+        cout << PLAYER_LOST << endl;
+    }
 }
 void warGame() {
     Deck deck;
@@ -245,6 +267,7 @@ void warGame() {
     }
 }
 
+
 //For Craps:
 int rollDie()
 {
@@ -256,6 +279,7 @@ int rollDie()
     return dieSum;
 }
 
+//For Hangman:
 string setRandomWord()
 {
     srand(time(0));
@@ -275,6 +299,182 @@ string setRandomWord()
     int wordNum = rand() % wordList.size();
     inFile.close();
     return wordList[wordNum];
+}
+
+//For Tic Tac Toe:
+void playerMove(char theBoard[3][3])
+{
+    int moveNum;
+    coordinates moveCoord;
+    do{
+        cout << "Where would you like to move? ";
+        cin >> moveNum;
+        try
+        {
+            moveCoord.x = (moveNum - 1) % 3;
+            moveCoord.y = (moveNum - 1) / 3;
+            if (validMove(theBoard, moveCoord))
+            {
+                theBoard[moveCoord.y][moveCoord.x] = 'X';
+                break;
+            }
+            else
+            {
+                throw runtime_error("That is not a valid move, please choose a position that hasn't played in.");
+            }
+        }
+        catch (exception err)
+        {
+            cout << err.what() << endl;
+            continue;
+        }
+        catch (...)
+        {
+            cout << "That is not a valid move, please select a number from the board.\n";
+            continue;
+        }
+    } while (!validMove(theBoard, moveCoord));
+}
+
+void computerMove(char theBoard[3][3])
+{
+
+}
+
+bool validMove(char theBoard[3][3], coordinates moveChoice)
+{
+    if (theBoard[moveChoice.y][moveChoice.x] >= '1' &&
+        theBoard[moveChoice.y][moveChoice.x] <= '9')
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void generateWinningCombos(vector<vector<coordinates>>& winningCombos)
+{
+    vector<coordinates> tempRow;
+    // Generating winning combinations for the rows
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            coordinates tempCoords{};
+            tempCoords.x = i;
+            tempCoords.y = j;
+            tempRow.push_back(tempCoords);
+        }
+        winningCombos.push_back(tempRow);
+        tempRow.clear();
+    }
+
+    // Generating winning combinations for the columns
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            coordinates tempCoords{};
+            tempCoords.x = j;
+            tempCoords.y = i;
+            tempRow.push_back(tempCoords);
+        }
+        winningCombos.push_back(tempRow);
+        tempRow.clear();
+    }
+
+    // Generating winning combinations for the diagonals
+    for (int i = 0; i < 3; i++)
+    {
+        coordinates tempCoords{};
+        tempCoords.x = i;
+        tempCoords.y = i;
+        tempRow.push_back(tempCoords);
+    }
+    winningCombos.push_back(tempRow);
+    tempRow.clear();
+    for (int i = 0; i < 3; i++)
+    {
+        coordinates tempCoords{};
+        tempCoords.x = i;
+        tempCoords.y = 2 - i;
+        tempRow.push_back(tempCoords);
+    }
+    winningCombos.push_back(tempRow);
+    tempRow.clear();
+}
+
+void printWinningCombos(vector<vector<coordinates>>& winningCombos)
+{
+    for (int i = 0; i < winningCombos.size(); i++)
+    {
+        for (int j = 0; j < winningCombos[i].size(); j++)
+        {
+            cout << winningCombos[i][j].x << ", " << winningCombos[i][j].y << " ";
+        }
+        cout << endl;
+    }
+}
+
+void printBoard(char theBoard[3][3])
+{
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            cout << theBoard[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+bool checkWinningMove(char theBoard[3][3], vector<vector<coordinates>>& winningCombos, coordinates& play)
+{
+    for (vector<coordinates> combo : winningCombos)
+    {
+        if (theBoard[combo[0].y][combo[0].x] == theBoard[combo[1].y][combo[1].x])
+        {
+            play.x = combo[2].x;
+            play.y = combo[2].y;
+            return true;
+        }
+        if (theBoard[combo[1].x][combo[1].y] == theBoard[combo[2].x][combo[2].y])
+        {
+            play.x = combo[0].x;
+            play.y = combo[0].y;
+            return true;
+        }
+        if (theBoard[combo[0].x][combo[0].y] == theBoard[combo[2].x][combo[2].y])
+        {
+            play.x = combo[1].x;
+            play.y = combo[1].y;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool checkWin(char theBoard[3][3], vector<vector<coordinates>>& winningCombos, bool& playerWon)
+{
+    for (vector<coordinates> combo : winningCombos)
+    {
+        if (theBoard[combo[0].y][combo[0].x] == theBoard[combo[1].y][combo[1].x] &&
+            theBoard[combo[1].y][combo[1].x] == theBoard[combo[2].y][combo[2].x])
+        {
+            if (theBoard[combo[0].y][combo[0].x] == 'X')
+            {
+                playerWon = true;
+            }
+            else
+            {
+                playerWon = false;
+            }
+            return true;
+        }
+    }
+    return false;
 }
 
 /// <summary>

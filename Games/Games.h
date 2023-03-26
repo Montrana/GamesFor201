@@ -19,6 +19,15 @@ struct card {
 			   //In war, they're the same as the face number;
 };
 
+struct coordinates {
+	int x, y;
+};
+
+//the coordinates of all the corners
+const coordinates CORNERS[4] = {{0,0}, {0,2}, {2,0}, {2,2}};
+//the coordinates of the center of the tic tac toe board
+const coordinates CENTER = { 1, 1 };
+
 //Christian, during class
 const char HEART = '\x03';
 const char DIAMOND = '\x04';
@@ -39,5 +48,16 @@ void ticTacToe();
 void warGame();
 
 int rollDie();
+
 string setRandomWord();
+
+void playerMove(char theBoard[3][3]);
+void computerMove(char theBoard[3][3]);
+bool validMove(char theBoard[3][3], coordinates moveChoice);
+void generateWinningCombos(vector<vector<coordinates>>& winningCombos);
+void printWinningCombos(vector<vector<coordinates>>& winningCombos);
+void printBoard(char theBoard[3][3]);
+bool checkWinningMove(char theBoard[3][3], vector<vector<coordinates>>& winningCombos, coordinates& play);
+bool checkWin(char theBoard[3][3], vector<vector<coordinates>>& winningCombos, bool& playerWon);
+
 void printCard(card _card);
