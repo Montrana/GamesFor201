@@ -19,14 +19,16 @@ struct card {
 			   //In war, they're the same as the face number;
 };
 
-struct coordinates {
+struct coordinate {
 	int x, y;
 };
 
 //the coordinates of all the corners
-const coordinates CORNERS[4] = {{0,0}, {0,2}, {2,0}, {2,2}};
+const coordinate CORNERS[4] = {{0,0}, {2,0}, {0,2}, {2,2}};
 //the coordinates of the center of the tic tac toe board
-const coordinates CENTER = { 1, 1 };
+const coordinate CENTER = { 1, 1 };
+
+const coordinate SIDES[4] = {{0,1}, {1,0}, {2,1}, {1,2}};
 
 //Christian, during class
 const char HEART = '\x03';
@@ -52,12 +54,15 @@ int rollDie();
 string setRandomWord();
 
 void playerMove(char theBoard[3][3]);
-void computerMove(char theBoard[3][3]);
-bool validMove(char theBoard[3][3], coordinates moveChoice);
-void generateWinningCombos(vector<vector<coordinates>>& winningCombos);
-void printWinningCombos(vector<vector<coordinates>>& winningCombos);
+void computerMove(char theBoard[3][3], vector<vector<coordinate>>const& winningCombos);
+bool validMove(char theBoard[3][3], coordinate moveChoice);
+void generateWinningCombos(vector<vector<coordinate>>& winningCombos);
+void printWinningCombos(vector<vector<coordinate>>& winningCombos);
 void printBoard(char theBoard[3][3]);
-bool checkWinningMove(char theBoard[3][3], vector<vector<coordinates>>& winningCombos, coordinates& play);
-bool checkWin(char theBoard[3][3], vector<vector<coordinates>>& winningCombos, bool& playerWon);
+bool checkCenterMove(char theBoard[3][3], coordinate& play);
+bool checkCornerMove(char theBoard[3][3], coordinate& play);
+bool checkSideMove(char theBoard[3][3], coordinate& play);
+bool checkWinningMove(char theBoard[3][3], vector<vector<coordinate>>const &winningCombos, coordinate& play);
+bool checkWin(char theBoard[3][3], vector<vector<coordinate>>const &winningCombos, bool& playerWon);
 
 void printCard(card _card);

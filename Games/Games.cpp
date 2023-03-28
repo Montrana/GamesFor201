@@ -185,14 +185,26 @@ void ticTacToe() {
     char theBoard[3][3] = { {'1', '2', '3'},
                             {'4', '5', '6'},
                             {'7', '8', '9'}};
-    vector<vector<coordinates>> winningCombos;
+    vector<vector<coordinate>> winningCombos;
     generateWinningCombos(winningCombos);
     bool playerWin;
+    bool playerTurn = true;
     bool coinFlip = rand() % 2;
     while (!checkWin(theBoard, winningCombos, playerWin))
     {
         printBoard(theBoard);
-        playerMove(theBoard);
+        cout << endl;
+        if (playerTurn)
+        {
+            playerMove(theBoard);
+            cout << endl;
+        }
+        else
+        {
+            computerMove(theBoard, winningCombos);
+            cout << endl;
+        }
+        playerTurn = !playerTurn;
     }
     printBoard(theBoard);
     if (playerWin)
@@ -305,7 +317,7 @@ string setRandomWord()
 void playerMove(char theBoard[3][3])
 {
     int moveNum;
-    coordinates moveCoord;
+    coordinate moveCoord;
     do{
         cout << "Where would you like to move? ";
         cin >> moveNum;
@@ -336,12 +348,28 @@ void playerMove(char theBoard[3][3])
     } while (!validMove(theBoard, moveCoord));
 }
 
-void computerMove(char theBoard[3][3])
+void computerMove(char theBoard[3][3], vector<vector<coordinate>>const &winningCombos)
 {
-
+    coordinate move;
+    if (checkWinningMove(theBoard, winningCombos, move))
+    {
+        theBoard[move.y][move.x] = 'O';
+    }
+    else if (checkCenterMove(theBoard, move))
+    {
+        theBoard[move.y][move.x] = 'O';
+    }
+    else if (checkCornerMove(theBoard, move))
+    {
+        theBoard[move.y][move.x] = 'O';
+    }
+    else if (checkCornerMove(theBoard, move))
+    {
+        theBoard[move.y][move.x] = 'O';
+    }
 }
 
-bool validMove(char theBoard[3][3], coordinates moveChoice)
+bool validMove(char theBoard[3][3], coordinate moveChoice)
 {
     if (theBoard[moveChoice.y][moveChoice.x] >= '1' &&
         theBoard[moveChoice.y][moveChoice.x] <= '9')
@@ -354,17 +382,17 @@ bool validMove(char theBoard[3][3], coordinates moveChoice)
     }
 }
 
-void generateWinningCombos(vector<vector<coordinates>>& winningCombos)
+void generateWinningCombos(vector<vector<coordinate>>& winningCombos)
 {
-    vector<coordinates> tempRow;
+    vector<coordinate> tempRow;
     // Generating winning combinations for the rows
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
         {
-            coordinates tempCoords{};
-            tempCoords.x = i;
-            tempCoords.y = j;
+            coordinate tempCoords{};
+            tempCoords.x = j;
+            tempCoords.y = i;
             tempRow.push_back(tempCoords);
         }
         winningCombos.push_back(tempRow);
@@ -376,7 +404,7 @@ void generateWinningCombos(vector<vector<coordinates>>& winningCombos)
     {
         for (int j = 0; j < 3; j++)
         {
-            coordinates tempCoords{};
+            coordinate tempCoords{};
             tempCoords.x = j;
             tempCoords.y = i;
             tempRow.push_back(tempCoords);
@@ -388,7 +416,7 @@ void generateWinningCombos(vector<vector<coordinates>>& winningCombos)
     // Generating winning combinations for the diagonals
     for (int i = 0; i < 3; i++)
     {
-        coordinates tempCoords{};
+        coordinate tempCoords{};
         tempCoords.x = i;
         tempCoords.y = i;
         tempRow.push_back(tempCoords);
@@ -397,7 +425,7 @@ void generateWinningCombos(vector<vector<coordinates>>& winningCombos)
     tempRow.clear();
     for (int i = 0; i < 3; i++)
     {
-        coordinates tempCoords{};
+        coordinate tempCoords{};
         tempCoords.x = i;
         tempCoords.y = 2 - i;
         tempRow.push_back(tempCoords);
@@ -406,7 +434,7 @@ void generateWinningCombos(vector<vector<coordinates>>& winningCombos)
     tempRow.clear();
 }
 
-void printWinningCombos(vector<vector<coordinates>>& winningCombos)
+void printWinningCombos(vector<vector<coordinate>>& winningCombos)
 {
     for (int i = 0; i < winningCombos.size(); i++)
     {
@@ -430,40 +458,85 @@ void printBoard(char theBoard[3][3])
     }
 }
 
-bool checkWinningMove(char theBoard[3][3], vector<vector<coordinates>>& winningCombos, coordinates& play)
+bool checkCenterMove(char theBoard[3][3], coordinate& play)
 {
-    for (vector<coordinates> combo : winningCombos)
+    play = CENTER;
+    return validMove(theBoard, play);
+}
+bool checkCornerMove(char theBoard[3][3], coordinate& play)
+{
+    //for (coordinate corner : CORNERS)
+    for (int i = 0; i < 4; i++)
     {
-        if (theBoard[combo[0].y][combo[0].x] == theBoard[combo[1].y][combo[1].x])
+        if (validMove(theBoard, CORNERS[i]))
         {
-            play.x = combo[2].x;
-            play.y = combo[2].y;
-            return true;
-        }
-        if (theBoard[combo[1].x][combo[1].y] == theBoard[combo[2].x][combo[2].y])
-        {
-            play.x = combo[0].x;
-            play.y = combo[0].y;
-            return true;
-        }
-        if (theBoard[combo[0].x][combo[0].y] == theBoard[combo[2].x][combo[2].y])
-        {
-            play.x = combo[1].x;
-            play.y = combo[1].y;
+            play = CORNERS[i];
             return true;
         }
     }
     return false;
 }
 
-bool checkWin(char theBoard[3][3], vector<vector<coordinates>>& winningCombos, bool& playerWon)
+bool checkSideMove(char theBoard[3][3], coordinate& play)
 {
-    for (vector<coordinates> combo : winningCombos)
+    //for (coordinate side : SIDES)
+    for(int i = 0; i < 4; i++)
     {
-        if (theBoard[combo[0].y][combo[0].x] == theBoard[combo[1].y][combo[1].x] &&
-            theBoard[combo[1].y][combo[1].x] == theBoard[combo[2].y][combo[2].x])
+        if (validMove(theBoard, SIDES[i]))
         {
-            if (theBoard[combo[0].y][combo[0].x] == 'X')
+            play = SIDES[i];
+            return true;
+        }
+    }
+    return false;
+}
+
+bool checkWinningMove(char theBoard[3][3], vector<vector<coordinate>>const &winningCombos, coordinate& play)
+{
+    //for (vector<coordinate> combo : winningCombos)
+    for(int i = 0; i < winningCombos.size(); i++)
+    {
+        if (theBoard[winningCombos[i][0].y][winningCombos[i][0].x] == 
+            theBoard[winningCombos[i][1].y][winningCombos[i][1].x])
+        {
+            if (validMove(theBoard, play))
+            {
+                play = winningCombos[i][2];
+                return true;
+            }
+        }
+        if (theBoard[winningCombos[i][1].y][winningCombos[i][1].x] ==
+            theBoard[winningCombos[i][2].y][winningCombos[i][2].x])
+        {
+            if (validMove(theBoard, winningCombos[i][0]))
+            {
+                play = winningCombos[i][0];
+                return true;
+            }
+        }
+        if (theBoard[winningCombos[i][0].y][winningCombos[i][0].x] ==
+            theBoard[winningCombos[i][2].y][winningCombos[i][2].x])
+        {
+            if (validMove(theBoard, play))
+            {
+                play = winningCombos[i][1];
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool checkWin(char theBoard[3][3], vector<vector<coordinate>>const &winningCombos, bool& playerWon)
+{
+    for (int i = 0; i < winningCombos.size(); i++)
+    {
+        if (theBoard[winningCombos[i][0].y][winningCombos[i][0].x] == 
+            theBoard[winningCombos[i][1].y][winningCombos[i][1].x] &&
+            theBoard[winningCombos[i][1].y][winningCombos[i][1].x] == 
+            theBoard[winningCombos[i][2].y][winningCombos[i][2].x])
+        {
+            if (theBoard[winningCombos[i][0].y][winningCombos[i][0].x] == 'X')
             {
                 playerWon = true;
             }
