@@ -11,6 +11,9 @@ public:
 	BJ_Hand();
 	BJ_Hand(vector<card> _cards);
 
+	int getHandValue();
+
 	void addCard(card _card);
+	void showCards();
 };
 

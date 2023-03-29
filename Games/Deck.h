@@ -13,6 +13,7 @@ public:
 
 	void shuffle();
 	void print();
-	void deal(int cardsToDeal, list<card>& hand);
+	void dealWar(int cardsToDeal, list<card>& hand);
+	void deal_BJ(int cardsToDeal, vector<card>& hand);
 };
 

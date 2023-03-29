@@ -93,6 +93,17 @@ void warInitiated(list<card>& wonCards, WarHand& playerHand, WarHand& compHand)
 }
 
 void blackjack() {
+    Deck deck;
+    vector<card> tempPlayerHand, tempCompHand;
+    //random_device rand;
+
+    deck.shuffle();
+    deck.deal_BJ(2, tempPlayerHand);
+    deck.deal_BJ(2, tempCompHand);
+
+    BJ_Hand playerHand(tempPlayerHand);
+    BJ_Hand compHand(tempCompHand);
+
 
 }
 void craps() {
@@ -187,33 +198,36 @@ void ticTacToe() {
                             {'7', '8', '9'}};
     vector<vector<coordinate>> winningCombos;
     generateWinningCombos(winningCombos);
-    bool playerWin;
-    bool playerTurn = true;
-    bool coinFlip = rand() % 2;
+    int playerWin;
+    bool playerTurn = rand() % 2;
+    coordinate lastPlayerMove = { -1, -1 };
     while (!checkWin(theBoard, winningCombos, playerWin))
     {
         printBoard(theBoard);
         cout << endl;
         if (playerTurn)
         {
-            playerMove(theBoard);
-            cout << endl;
+            lastPlayerMove = playerMove(theBoard);
         }
         else
         {
-            computerMove(theBoard, winningCombos);
-            cout << endl;
+            computerMove(theBoard, winningCombos, lastPlayerMove);
         }
         playerTurn = !playerTurn;
     }
     printBoard(theBoard);
-    if (playerWin)
+    cout << endl;
+    if (playerWin == 1)
     {
         cout << PLAYER_WON << endl;
     }
-    else
+    else if(playerWin == 0)
     {
         cout << PLAYER_LOST << endl;
+    }
+    else
+    {
+        cout << "Stalemate!!" << endl;
     }
 }
 void warGame() {
@@ -222,8 +236,8 @@ void warGame() {
     //random_device rand;
 
     deck.shuffle();
-    deck.deal(STANDARD_DECK_SIZE / 2, tempPlayerHand);
-    deck.deal(STANDARD_DECK_SIZE / 2, tempCompHand);
+    deck.dealWar(STANDARD_DECK_SIZE / 2, tempPlayerHand);
+    deck.dealWar(STANDARD_DECK_SIZE / 2, tempCompHand);
 
     WarHand playerHand(tempPlayerHand);
     WarHand compHand(tempCompHand);
@@ -314,7 +328,7 @@ string setRandomWord()
 }
 
 //For Tic Tac Toe:
-void playerMove(char theBoard[3][3])
+coordinate playerMove(char theBoard[3][3])
 {
     int moveNum;
     coordinate moveCoord;
@@ -328,7 +342,9 @@ void playerMove(char theBoard[3][3])
             if (validMove(theBoard, moveCoord))
             {
                 theBoard[moveCoord.y][moveCoord.x] = 'X';
-                break;
+                cout << endl;
+                cout << "Player move:\n";
+                return moveCoord;
             }
             else
             {
@@ -345,10 +361,10 @@ void playerMove(char theBoard[3][3])
             cout << "That is not a valid move, please select a number from the board.\n";
             continue;
         }
-    } while (!validMove(theBoard, moveCoord));
+    } while (true);
 }
 
-void computerMove(char theBoard[3][3], vector<vector<coordinate>>const &winningCombos)
+void computerMove(char theBoard[3][3], vector<vector<coordinate>>const &winningCombos, coordinate playerLastMove)
 {
     coordinate move;
     if (checkWinningMove(theBoard, winningCombos, move))
@@ -359,14 +375,15 @@ void computerMove(char theBoard[3][3], vector<vector<coordinate>>const &winningC
     {
         theBoard[move.y][move.x] = 'O';
     }
-    else if (checkCornerMove(theBoard, move))
+    else if (checkCornerMove(theBoard, move, playerLastMove))
     {
         theBoard[move.y][move.x] = 'O';
     }
-    else if (checkCornerMove(theBoard, move))
+    else if (checkSideMove(theBoard, move))
     {
         theBoard[move.y][move.x] = 'O';
     }
+    cout << "Computer move:\n";
 }
 
 bool validMove(char theBoard[3][3], coordinate moveChoice)
@@ -405,8 +422,8 @@ void generateWinningCombos(vector<vector<coordinate>>& winningCombos)
         for (int j = 0; j < 3; j++)
         {
             coordinate tempCoords{};
-            tempCoords.x = j;
-            tempCoords.y = i;
+            tempCoords.x = i;
+            tempCoords.y = j;
             tempRow.push_back(tempCoords);
         }
         winningCombos.push_back(tempRow);
@@ -463,9 +480,37 @@ bool checkCenterMove(char theBoard[3][3], coordinate& play)
     play = CENTER;
     return validMove(theBoard, play);
 }
-bool checkCornerMove(char theBoard[3][3], coordinate& play)
+
+bool checkCornerMove(char theBoard[3][3], coordinate& play, coordinate playerLastMove)
 {
     //for (coordinate corner : CORNERS)
+    for (int i = 0; i < 4; i++)
+    {
+        if (CORNERS[i].x == playerLastMove.x && CORNERS[i].y == playerLastMove.y)
+        {
+            play = playerLastMove;
+            if (play.x == 0)
+            {
+                play.x = 2;
+            }
+            else
+            {
+                play.x = 0;
+            }
+            if (play.y == 0)
+            {
+                play.y = 2;
+            }
+            else
+            {
+                play.y = 0;
+            }
+            if (validMove(theBoard, play))
+            {
+                return true;
+            }
+        }
+    }
     for (int i = 0; i < 4; i++)
     {
         if (validMove(theBoard, CORNERS[i]))
@@ -499,27 +544,29 @@ bool checkWinningMove(char theBoard[3][3], vector<vector<coordinate>>const &winn
         if (theBoard[winningCombos[i][0].y][winningCombos[i][0].x] == 
             theBoard[winningCombos[i][1].y][winningCombos[i][1].x])
         {
+            play = winningCombos[i][2];
             if (validMove(theBoard, play))
             {
-                play = winningCombos[i][2];
                 return true;
             }
         }
         if (theBoard[winningCombos[i][1].y][winningCombos[i][1].x] ==
             theBoard[winningCombos[i][2].y][winningCombos[i][2].x])
         {
+            play = winningCombos[i][0];
             if (validMove(theBoard, winningCombos[i][0]))
             {
-                play = winningCombos[i][0];
+                
                 return true;
             }
         }
         if (theBoard[winningCombos[i][0].y][winningCombos[i][0].x] ==
             theBoard[winningCombos[i][2].y][winningCombos[i][2].x])
         {
+            play = winningCombos[i][1];
             if (validMove(theBoard, play))
             {
-                play = winningCombos[i][1];
+                
                 return true;
             }
         }
@@ -527,7 +574,7 @@ bool checkWinningMove(char theBoard[3][3], vector<vector<coordinate>>const &winn
     return false;
 }
 
-bool checkWin(char theBoard[3][3], vector<vector<coordinate>>const &winningCombos, bool& playerWon)
+bool checkWin(char theBoard[3][3], vector<vector<coordinate>>const &winningCombos, int& playerWon)
 {
     for (int i = 0; i < winningCombos.size(); i++)
     {
@@ -538,16 +585,28 @@ bool checkWin(char theBoard[3][3], vector<vector<coordinate>>const &winningCombo
         {
             if (theBoard[winningCombos[i][0].y][winningCombos[i][0].x] == 'X')
             {
-                playerWon = true;
+                playerWon = 1;
             }
             else
             {
-                playerWon = false;
+                playerWon = 0;
             }
             return true;
         }
     }
-    return false;
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            if (validMove(theBoard, { i, j }))
+            {
+                return false;
+            }
+        }
+        
+    }
+    playerWon = 2;
+    return true;
 }
 
 /// <summary>

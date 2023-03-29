@@ -53,16 +53,16 @@ int rollDie();
 
 string setRandomWord();
 
-void playerMove(char theBoard[3][3]);
-void computerMove(char theBoard[3][3], vector<vector<coordinate>>const& winningCombos);
+coordinate playerMove(char theBoard[3][3]);
+void computerMove(char theBoard[3][3], vector<vector<coordinate>>const& winningCombos, coordinate playerLastMove);
 bool validMove(char theBoard[3][3], coordinate moveChoice);
 void generateWinningCombos(vector<vector<coordinate>>& winningCombos);
 void printWinningCombos(vector<vector<coordinate>>& winningCombos);
 void printBoard(char theBoard[3][3]);
 bool checkCenterMove(char theBoard[3][3], coordinate& play);
-bool checkCornerMove(char theBoard[3][3], coordinate& play);
+bool checkCornerMove(char theBoard[3][3], coordinate& play, coordinate playerLastMove);
 bool checkSideMove(char theBoard[3][3], coordinate& play);
 bool checkWinningMove(char theBoard[3][3], vector<vector<coordinate>>const &winningCombos, coordinate& play);
-bool checkWin(char theBoard[3][3], vector<vector<coordinate>>const &winningCombos, bool& playerWon);
+bool checkWin(char theBoard[3][3], vector<vector<coordinate>>const &winningCombos, int& playerWon);
 
 void printCard(card _card);

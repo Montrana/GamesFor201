@@ -26,13 +26,38 @@ void Deck::print() {
 }
 
 
-void Deck::deal(int cardsToDeal, list<card>& hand)
+void Deck::dealWar(int cardsToDeal, list<card>& hand)
 {
     if (cardsToDeal <= deckOfCards.size())
     {
         for (int i = 0; i < cardsToDeal; i++)
         {
             hand.push_front(deckOfCards.back());
+            deckOfCards.pop_back();
+        }
+    }
+    else
+    {
+        throw runtime_error("Not enough cards in deck.");
+    }
+}
+
+void Deck::deal_BJ(int cardsToDeal, vector<card>& hand)
+{
+    if (cardsToDeal <= deckOfCards.size())
+    {
+        for (int i = 0; i < cardsToDeal; i++)
+        {
+            card cardToDeal = deckOfCards.back();
+            if (cardToDeal.faceNum > 10 && cardToDeal.faceNum < 14)
+            {
+                cardToDeal.value = 10;
+            }
+            else if (cardToDeal.faceNum == 14)
+            {
+                cardToDeal.value = 11;
+            }
+            hand.push_back(cardToDeal);
             deckOfCards.pop_back();
         }
     }
