@@ -19,6 +19,7 @@ int BJ_Hand::getHandValue()
 }
 
 void BJ_Hand::addCard(card _card) {
+	handValue += _card.value;
 	hand.push_back(_card);
 }
 
@@ -26,37 +27,32 @@ void BJ_Hand::showCards()
 {
 	for (int i = 0; i < hand.size(); i++)
 	{
-        string face;
-        if (hand[i].faceNum <= 10)
-        {
-            face = to_string(hand[i].faceNum);
-        }
-        else
-        {
-            if (hand[i].faceNum == 11)
-            {
-                face = "J";
-            }
-            else if (hand[i].faceNum == 12)
-            {
-                face = "Q";
-            }
-            else if (hand[i].faceNum == 13)
-            {
-                face = "K";
-            }
-            else if (hand[i].faceNum == 14)
-            {
-                face = "A";
-            }
-        }
-        if (hand[i].suit == HEART || hand[i].suit == DIAMOND)
-        {
-            cout << setw(10) << "\033[31m" << hand[i].suit << " " << face << "\033[0m"; //prints red
-        }
-        else
-        {
-            cout << setw(10) << "\033[97m" << hand[i].suit << " " << face << "\033[0m"; //prints white
-        }
+		printCard(hand[i]);
 	}
+	
+}
+int BJ_Hand::showFirstCard()
+{
+	printCard(hand[0]);
+	cout << " ?";
+	return hand[0].value;
+}
+
+void BJ_Hand::resetValue()
+{
+
+}
+
+bool BJ_Hand::makeAceLow()
+{
+    for (int i = 0; i < hand.size(); i++)
+    {
+        if (hand[i].value > 10)
+        {
+            hand[i].value = 1;
+			resetValue();
+            return true;
+        }
+    }
+    return false;
 }

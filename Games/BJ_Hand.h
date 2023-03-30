@@ -15,5 +15,8 @@ public:
 
 	void addCard(card _card);
 	void showCards();
+	int showFirstCard();
+	void resetValue();
+	bool makeAceLow();
 };
 

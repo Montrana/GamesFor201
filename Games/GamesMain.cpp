@@ -7,7 +7,8 @@
 int main()
 {
     //hangman();
-    ticTacToe();
+    //ticTacToe();
+    blackjack();
     /*try
     {
         warGame();
