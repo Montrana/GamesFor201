@@ -120,7 +120,8 @@ void blackjack() {
     Deck deck;
     vector<card> tempPlayerHand, tempCompHand;
 
-    bool playerLost = false;
+    bool winnerChosen = false;
+    bool blackjack = false;
 
     deck.shuffle();
     deck.deal_BJ(2, tempPlayerHand);
@@ -139,7 +140,11 @@ void blackjack() {
     cout << "Type \"hit\" if you would like to hit: ";
     cin >> hitInput;
     hitInput[0] = tolower(hitInput[0]);
-    while (hitInput[0] == 'h' && playerHand.getHandValue() < 21)
+    if (playerHand.getHandValue() == 21)
+    {
+        blackjack = true;
+    }
+    while (hitInput[0] == 'h' && playerHand.getHandValue() < 21 && !blackjack)
     {
         deck.deal_BJ(1, tempPlayerHand);
         playerHand.addCard(tempPlayerHand.back());
@@ -149,21 +154,30 @@ void blackjack() {
             playerHand.makeAceLow();
         }
         printPlayerBJ(playerHand);
-        cout << "Type \"hit\" if you would like to hit: ";
-        cin >> hitInput;
-        
+        if (playerHand.getHandValue() < 21)
+        {
+            cout << "Type \"hit\" if you would like to hit: ";
+            cin >> hitInput;
+        }
+    }
+    if (blackjack)
+    {
+        printCompHandBJ(compHand);
+        cout << PLAYER_WON << " Blackjack!" << endl;
+        winnerChosen = true;
     }
     if (playerHand.getHandValue() > 21)
     {
         printCompHandBJ(compHand);
-        cout << PLAYER_LOST << endl;
-        playerLost = true;
+        cout << PLAYER_LOST << " Bust!" << endl;
+        winnerChosen = true;
     }
     
-    if (!playerLost)
+    if (!winnerChosen)
     {
         while (compHand.getHandValue() < 17)
         {
+            printCompHandBJ(compHand);
             deck.deal_BJ(1, tempCompHand);
             compHand.addCard(tempCompHand.back());
             tempCompHand.pop_back();
@@ -171,11 +185,11 @@ void blackjack() {
             {
                 compHand.makeAceLow();
             }
-            printCompHandBJ(compHand);
         }
+        printCompHandBJ(compHand);
         if (compHand.getHandValue() > 21)
         {
-            cout << PLAYER_WON << endl;
+            cout << PLAYER_WON << " Bust!" << endl;
         }
         else if (compHand.getHandValue() > playerHand.getHandValue())
         {
@@ -183,7 +197,7 @@ void blackjack() {
         }
         else if (compHand.getHandValue() < playerHand.getHandValue())
         {
-            cout << PLAYER_LOST << endl;
+            cout << PLAYER_WON << endl;
         }
         else if (compHand.getHandValue() == playerHand.getHandValue())
         {
@@ -192,6 +206,7 @@ void blackjack() {
     }
 }
 void craps() {
+    srand(time(0));
     int dieSum = rollDie();
     if (dieSum == 7 || dieSum == 11)
         cout << PLAYER_WON << endl;
@@ -200,11 +215,10 @@ void craps() {
     else
     {
         int point = dieSum;
-        dieSum = rollDie();
-        while (dieSum != 7 && dieSum != point)
+        do 
         {
             dieSum = rollDie();
-        }
+        } while (dieSum != 7 && dieSum != point);
         if (dieSum == 7)
         {
             cout << PLAYER_LOST << endl;
@@ -382,7 +396,6 @@ void warGame() {
 //For Craps:
 int rollDie()
 {
-    srand(time(0));
     int die1 = rand() % 6 + 1;
     int die2 = rand() % 6 + 1;
     int dieSum = die1 + die2;

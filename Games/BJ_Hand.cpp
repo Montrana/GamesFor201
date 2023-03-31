@@ -25,6 +25,7 @@ void BJ_Hand::addCard(card _card) {
 
 void BJ_Hand::showCards()
 {
+	cout << "\t";
 	for (int i = 0; i < hand.size(); i++)
 	{
 		printCard(hand[i]);
@@ -33,14 +34,19 @@ void BJ_Hand::showCards()
 }
 int BJ_Hand::showFirstCard()
 {
+	cout << "\t";
 	printCard(hand[0]);
-	cout << " ?";
+	cout << setw(7) << " ?";
 	return hand[0].value;
 }
 
 void BJ_Hand::resetValue()
 {
-
+	handValue = 0;
+	for (card _card : hand)
+	{
+		handValue += _card.value;
+	}
 }
 
 bool BJ_Hand::makeAceLow()
