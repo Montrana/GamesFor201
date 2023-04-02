@@ -4,6 +4,10 @@
 #include "Games.h"
 #include "Deck.h"
 
+/// <summary>
+/// Plays one of 5 games, blackjack, craps, hangman, and tictactoe;
+/// </summary>
+/// <returns></returns>
 int main()
 {
     string gameChoice;

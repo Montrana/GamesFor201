@@ -4,6 +4,16 @@
 #include "BJ_Hand.h"
 
 //For War:
+
+/// <summary>
+/// Pulls the top card from the player's hand and the computer's hand, 
+/// if one player does not have a card to show, the other player wins
+/// </summary>
+/// <param name="wonCards">The cards that are won by the Player or Computer</param>
+/// <param name="playerHand">The Player's hand</param>
+/// <param name="compHand">The Computer's hand</param>
+/// <param name="playerCard">The Player's card that gets shown</param>
+/// <param name="compCard">The Player's card that gets shown</param>
 void showCards(list<card>& wonCards, WarHand& playerHand, WarHand& compHand, card& playerCard, card& compCard)
 {
     if (playerHand.showCard(playerCard))
@@ -31,6 +41,12 @@ void showCards(list<card>& wonCards, WarHand& playerHand, WarHand& compHand, car
     wonCards.push_back(compCard);
 }
 
+/// <summary>
+/// Uses recusion to handle a war situation in a war game
+/// </summary>
+/// <param name="wonCards">The cards that are won during the war</param>
+/// <param name="playerHand">The Player's hand</param>
+/// <param name="compHand">The Computer's hand</param>
 void warInitiated(list<card>& wonCards, WarHand& playerHand, WarHand& compHand)
 {
     cout << setw(15) << "WAR!!\n";
@@ -93,14 +109,23 @@ void warInitiated(list<card>& wonCards, WarHand& playerHand, WarHand& compHand)
     }
 }
 
-//For Blackjack:
-void printPlayerBJ(BJ_Hand& playerHand)
+///For Blackjack:
+
+/// <summary>
+/// Shows the whole hand
+/// </summary>
+/// <param name="playerHand">The hand that gets shown</param>
+void printHandBJ(BJ_Hand& handToShow, string message)
 {
-    cout << "Player Hand: ";
-    playerHand.showCards();
+    cout << message;
+    handToShow.showCards();
     cout << endl;
-    cout << "Value: " << playerHand.getHandValue() << endl;
+    cout << "Value: " << handToShow.getHandValue() << endl;
 }
+/// <summary>
+/// Shows the Computer's first card, has a question mark for the other card in their hand
+/// </summary>
+/// <param name="compHand">The Computer's hand</param>
 void printCompCardBJ(BJ_Hand& compHand)
 {
     cout << "Computer Hand: ";
@@ -108,20 +133,21 @@ void printCompCardBJ(BJ_Hand& compHand)
     cout << endl;
     cout << "Value: " << value << endl;
 }
-void printCompHandBJ(BJ_Hand& compHand)
-{
-    cout << "Computer Hand: ";
-    compHand.showCards();
-    cout << endl;
-    cout << "Value: " << compHand.getHandValue() << endl;
-}
 
+
+/// <summary>
+/// Plays Blackjack
+/// Referenced the Pseudocode that we made in class
+/// </summary>
 void blackjack() {
     Deck deck;
     vector<card> tempPlayerHand, tempCompHand;
 
     bool winnerChosen = false;
     bool blackjack = false;
+
+    string playerHandMessage = "Player Hand: ";
+    string computerHandMessage = "Computer Hand: ";
 
     deck.shuffle();
     deck.deal_BJ(2, tempPlayerHand);
@@ -134,7 +160,7 @@ void blackjack() {
     tempCompHand.clear();
     
     printCompCardBJ(compHand);
-    printPlayerBJ(playerHand);
+    printHandBJ(playerHand, playerHandMessage);
     
     string hitInput;
     cout << "Type \"hit\" if you would like to hit: ";
@@ -153,7 +179,7 @@ void blackjack() {
         {
             playerHand.makeAceLow();
         }
-        printPlayerBJ(playerHand);
+        printHandBJ(playerHand, playerHandMessage);
         if (playerHand.getHandValue() < 21)
         {
             cout << "Type \"hit\" if you would like to hit: ";
@@ -162,13 +188,13 @@ void blackjack() {
     }
     if (blackjack)
     {
-        printCompHandBJ(compHand);
+        printHandBJ(compHand, computerHandMessage);
         cout << PLAYER_WON << " Blackjack!" << endl;
         winnerChosen = true;
     }
     if (playerHand.getHandValue() > 21)
     {
-        printCompHandBJ(compHand);
+        printHandBJ(compHand, computerHandMessage);
         cout << PLAYER_LOST << " Bust!" << endl;
         winnerChosen = true;
     }
@@ -177,7 +203,7 @@ void blackjack() {
     {
         while (compHand.getHandValue() < 17)
         {
-            printCompHandBJ(compHand);
+            printHandBJ(compHand, computerHandMessage);
             deck.deal_BJ(1, tempCompHand);
             compHand.addCard(tempCompHand.back());
             tempCompHand.pop_back();
@@ -186,7 +212,7 @@ void blackjack() {
                 compHand.makeAceLow();
             }
         }
-        printCompHandBJ(compHand);
+        printHandBJ(compHand, computerHandMessage);
         if (compHand.getHandValue() > 21)
         {
             cout << PLAYER_WON << " Bust!" << endl;
@@ -205,6 +231,11 @@ void blackjack() {
         }
     }
 }
+
+/// <summary>
+/// Plays Craps
+/// Most of this we did in class
+/// </summary>
 void craps() {
     srand(time(0));
     int dieSum = rollDie();
@@ -229,6 +260,10 @@ void craps() {
         }
     }
 }
+
+/// <summary>
+/// Plays Hangman
+/// </summary>
 void hangman() {
     string correctWord = setRandomWord();
     int guessesLeft = 6;
@@ -289,6 +324,10 @@ void hangman() {
         cout << PLAYER_WON << endl;
     }
 }
+
+/// <summary>
+/// Plays TicTacToe
+/// </summary>
 void ticTacToe() {
     srand(time(0));
     
@@ -329,6 +368,10 @@ void ticTacToe() {
         cout << "Stalemate!!" << endl;
     }
 }
+
+/// <summary>
+/// Plays War
+/// </summary>
 void warGame() {
     Deck deck;
     list<card> tempPlayerHand, tempCompHand;
@@ -393,7 +436,11 @@ void warGame() {
 }
 
 
-//For Craps:
+///For Craps:
+/// <summary>
+/// Rolls two pairs of dice and returns their sum
+/// </summary>
+/// <returns>The sum of the two dice</returns>
 int rollDie()
 {
     int die1 = rand() % 6 + 1;
@@ -403,7 +450,11 @@ int rollDie()
     return dieSum;
 }
 
-//For Hangman:
+///For Hangman:
+/// <summary>
+/// Sets a random word from a file
+/// </summary>
+/// <returns>The random word</returns>
 string setRandomWord()
 {
     srand(time(0));
@@ -425,7 +476,13 @@ string setRandomWord()
     return wordList[wordNum];
 }
 
-//For Tic Tac Toe:
+///For Tic Tac Toe:
+
+/// <summary>
+/// Gives the player an oportunity to move
+/// </summary>
+/// <param name="theBoard">The tictactoe board that is being played on</param>
+/// <returns>The coordinate that the player moved to</returns>
 coordinate playerMove(char theBoard[3][3])
 {
     int moveNum;
@@ -462,6 +519,12 @@ coordinate playerMove(char theBoard[3][3])
     } while (true);
 }
 
+/// <summary>
+/// Gives the computer an oportunity to move, using a specific set of guidelines for the AI
+/// </summary>
+/// <param name="theBoard">The tictactoe board that is being played on</param>
+/// <param name="winningCombos">The array of winning combos the computer prioritizes</param>
+/// <param name="playerLastMove">The player's last move</param>
 void computerMove(char theBoard[3][3], vector<vector<coordinate>>const &winningCombos, coordinate playerLastMove)
 {
     coordinate move;
@@ -484,6 +547,12 @@ void computerMove(char theBoard[3][3], vector<vector<coordinate>>const &winningC
     cout << "Computer move:\n";
 }
 
+/// <summary>
+/// Checks and sees if the move is valid
+/// </summary>
+/// <param name="theBoard">The tictactoe board that is being played on</param>
+/// <param name="moveChoice">The coordinates that have been chosen to move to</param>
+/// <returns>True if the move is valid</returns>
 bool validMove(char theBoard[3][3], coordinate moveChoice)
 {
     if (theBoard[moveChoice.y][moveChoice.x] >= '1' &&
@@ -497,6 +566,10 @@ bool validMove(char theBoard[3][3], coordinate moveChoice)
     }
 }
 
+/// <summary>
+/// generates the combinations the player or computer can use to win
+/// </summary>
+/// <param name="winningCombos">vector of winning combos</param>
 void generateWinningCombos(vector<vector<coordinate>>& winningCombos)
 {
     vector<coordinate> tempRow;
@@ -549,6 +622,10 @@ void generateWinningCombos(vector<vector<coordinate>>& winningCombos)
     tempRow.clear();
 }
 
+/// <summary>
+/// Prints out the winning combinations, used for testing
+/// </summary>
+/// <param name="winningCombos">The winning combinations</param>
 void printWinningCombos(vector<vector<coordinate>>& winningCombos)
 {
     for (int i = 0; i < winningCombos.size(); i++)
@@ -561,6 +638,10 @@ void printWinningCombos(vector<vector<coordinate>>& winningCombos)
     }
 }
 
+/// <summary>
+/// Prints the board
+/// </summary>
+/// <param name="theBoard">The tictactoe board that is being played on</param>
 void printBoard(char theBoard[3][3])
 {
     for (int i = 0; i < 3; i++)
@@ -573,12 +654,26 @@ void printBoard(char theBoard[3][3])
     }
 }
 
+/// <summary>
+/// checks to see if the center space can be moved into
+/// </summary>
+/// <param name="theBoard">The tictactoe board that is being played on</param>
+/// <param name="play">the coordinates of the center space</param>
+/// <returns>True if the center is available</returns>
 bool checkCenterMove(char theBoard[3][3], coordinate& play)
 {
     play = CENTER;
     return validMove(theBoard, play);
 }
 
+/// <summary>
+/// Loops through the corners to see if any of them are open.
+/// Goes oposite of player if player played in a corner and the space is open
+/// </summary>
+/// <param name="theBoard">The tictactoe board that is being played on</param>
+/// <param name="play">The coordinates of the corner space that is available</param>
+/// <param name="playerLastMove">Where the player last moved</param>
+/// <returns>True if one of the corners is available</returns>
 bool checkCornerMove(char theBoard[3][3], coordinate& play, coordinate playerLastMove)
 {
     //for (coordinate corner : CORNERS)
@@ -620,6 +715,12 @@ bool checkCornerMove(char theBoard[3][3], coordinate& play, coordinate playerLas
     return false;
 }
 
+/// <summary>
+/// Checks to see if one of the center tiles of the sides are open
+/// </summary>
+/// <param name="theBoard">The tictactoe board that is being played on</param>
+/// <param name="play">The coordinates of the side space that is available</param>
+/// <returns>True if one of the sides is available</returns>
 bool checkSideMove(char theBoard[3][3], coordinate& play)
 {
     //for (coordinate side : SIDES)
@@ -634,6 +735,13 @@ bool checkSideMove(char theBoard[3][3], coordinate& play)
     return false;
 }
 
+/// <summary>
+/// Checks to see if a winning or blocking move can be made
+/// </summary>
+/// <param name="theBoard">The tictactoe board that is being played on</param>
+/// <param name="winningCombos">The winning combinations</param>
+/// <param name="play">The coordinates of the winning or blocking move</param>
+/// <returns></returns>
 bool checkWinningMove(char theBoard[3][3], vector<vector<coordinate>>const &winningCombos, coordinate& play)
 {
     //for (vector<coordinate> combo : winningCombos)
@@ -672,6 +780,13 @@ bool checkWinningMove(char theBoard[3][3], vector<vector<coordinate>>const &winn
     return false;
 }
 
+/// <summary>
+/// Checks to see if the player or computer has won
+/// </summary>
+/// <param name="theBoard">The tictactoe board that is being played on</param>
+/// <param name="winningCombos">The winning combinations</param>
+/// <param name="playerWon">If the player has won or not</param>
+/// <returns>True if someone has won</returns>
 bool checkWin(char theBoard[3][3], vector<vector<coordinate>>const &winningCombos, int& playerWon)
 {
     for (int i = 0; i < winningCombos.size(); i++)
@@ -707,11 +822,12 @@ bool checkWin(char theBoard[3][3], vector<vector<coordinate>>const &winningCombo
     return true;
 }
 
+/// For Blackjack and War:
 /// <summary>
 /// Prints a card with the appropriate suit, value and color. 
 /// reference: https://www.codeproject.com/Tips/5255355/How-to-Put-Color-on-Windows-Console
 /// </summary>
-/// <param name="_card"></param>
+/// <param name="_card">The card that gets printed</param>
 void printCard(card _card)
 {
     string face;

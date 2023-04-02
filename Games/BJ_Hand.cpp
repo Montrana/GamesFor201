@@ -1,9 +1,16 @@
 #include "BJ_Hand.h"
 
+/// <summary>
+/// A default hand that initiallizes a hand value to 0
+/// </summary>
 BJ_Hand::BJ_Hand() {
 	handValue = 0;
 }
 
+/// <summary>
+/// Sets the hand and with the total hand value
+/// </summary>
+/// <param name="_cards">the cards that are put put into the hand</param>
 BJ_Hand::BJ_Hand(vector<card> _cards) {
 	hand = _cards;
 	handValue = 0;
@@ -13,16 +20,27 @@ BJ_Hand::BJ_Hand(vector<card> _cards) {
 	}
 }
 
+/// <summary>
+/// Gets the value of the hand
+/// </summary>
+/// <returns>the value of the hand</returns>
 int BJ_Hand::getHandValue()
 {
 	return handValue;
 }
 
+/// <summary>
+/// adds a card into the deck
+/// </summary>
+/// <param name="_card">the card to add</param>
 void BJ_Hand::addCard(card _card) {
 	handValue += _card.value;
 	hand.push_back(_card);
 }
 
+/// <summary>
+/// shows the cards in their deck
+/// </summary>
 void BJ_Hand::showCards()
 {
 	cout << "\t";
@@ -32,6 +50,11 @@ void BJ_Hand::showCards()
 	}
 	
 }
+
+/// <summary>
+/// Shows the first card, and has a question mark for the second
+/// </summary>
+/// <returns></returns>
 int BJ_Hand::showFirstCard()
 {
 	cout << "\t";
@@ -40,6 +63,9 @@ int BJ_Hand::showFirstCard()
 	return hand[0].value;
 }
 
+/// <summary>
+/// recalculates the hand value
+/// </summary>
 void BJ_Hand::resetValue()
 {
 	handValue = 0;
@@ -49,6 +75,10 @@ void BJ_Hand::resetValue()
 	}
 }
 
+/// <summary>
+/// changes the ace to be low
+/// </summary>
+/// <returns>if there was an ace that was changed</returns>
 bool BJ_Hand::makeAceLow()
 {
     for (int i = 0; i < hand.size(); i++)

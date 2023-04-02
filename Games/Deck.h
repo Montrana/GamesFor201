@@ -4,6 +4,9 @@
 #include "WarHand.h"
 #include "BJ_Hand.h"
 
+/// <summary>
+/// Deck class that has the deck of cards that will be dealt to player's hands
+/// </summary>
 class Deck {
 private: 
 	vector<card> deckOfCards;

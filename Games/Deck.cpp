@@ -2,6 +2,9 @@
 
 random_device rd;
 
+/// <summary>
+/// Initializes the deck of 52 cards
+/// </summary>
 Deck::Deck() {
     card tempCard;
     for (int s = 0; s < 4; s++) {
@@ -14,10 +17,16 @@ Deck::Deck() {
     }
 }
 
+/// <summary>
+/// Shuffles the deck
+/// </summary>
 void Deck::shuffle() {
     std::shuffle(deckOfCards.begin(), deckOfCards.end(), rd);
 }
 
+/// <summary>
+/// Prints the deck
+/// </summary>
 void Deck::print() {
     for (card _card : deckOfCards) {
         printCard(_card);
@@ -25,7 +34,11 @@ void Deck::print() {
     }
 }
 
-
+/// <summary>
+/// Deals for war
+/// </summary>
+/// <param name="cardsToDeal">Number of cards that are dealt</param>
+/// <param name="hand">The hand the cards are dealt to</param>
 void Deck::dealWar(int cardsToDeal, list<card>& hand)
 {
     if (cardsToDeal <= deckOfCards.size())
@@ -42,6 +55,11 @@ void Deck::dealWar(int cardsToDeal, list<card>& hand)
     }
 }
 
+/// <summary>
+/// Deal for blackjack
+/// </summary>
+/// <param name="cardsToDeal">Number of cards that are dealt</param>
+/// <param name="hand">The hand the cards are dealt to</param>
 void Deck::deal_BJ(int cardsToDeal, vector<card>& hand)
 {
     if (cardsToDeal <= deckOfCards.size())

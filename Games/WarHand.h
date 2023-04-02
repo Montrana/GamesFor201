@@ -1,6 +1,9 @@
 #pragma once
 #include "Games.h"
 
+/// <summary>
+/// The hand that is used for the war game
+/// </summary>
 class WarHand
 {
 private:
