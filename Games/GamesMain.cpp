@@ -1,5 +1,6 @@
-// Games.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+/// Name: Montana Nicholson
+/// Date: 3/17/2023
+/// This project is a combination of 5 games, Blackjack, Craps, Hangman, Tictactoe, and War
 
 #include "Games.h"
 #include "Deck.h"
