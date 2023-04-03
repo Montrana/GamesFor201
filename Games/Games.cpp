@@ -86,22 +86,10 @@ void warInitiated(list<card>& wonCards, WarHand& playerHand, WarHand& compHand)
     if (playerVal > compVal)
     {
         playerHand.addCards(wonCards);
-        cout << "Player has " << playerHand.getTotalCards() << " cards.\n";
-        cout << "Computer has " << compHand.getTotalCards() << " cards.\n";
-        cout << endl;
-        cout << "Player has " << playerHand.getTotalValue() << " totalValue.\n";
-        cout << "Computer has " << compHand.getTotalValue() << " totalValue.\n";
-        cout << endl;
     }
     else if (playerVal < compVal)
     {
         compHand.addCards(wonCards);
-        cout << "Player has " << playerHand.getTotalCards() << " cards.\n";
-        cout << "Computer has " << compHand.getTotalCards() << " cards.\n";
-        cout << endl;
-        cout << "Player has " << playerHand.getTotalValue() << " totalValue.\n";
-        cout << "Computer has " << compHand.getTotalValue() << " totalValue.\n";
-        cout << endl;
     }
     else
     {
@@ -144,7 +132,7 @@ void blackjack() {
     vector<card> tempPlayerHand, tempCompHand;
 
     bool winnerChosen = false;
-    bool blackjack = false;
+    bool blackjack = false; //true if the player got blackjack or not
 
     string playerHandMessage = "Player Hand: ";
     string computerHandMessage = "Computer Hand: ";
@@ -192,14 +180,13 @@ void blackjack() {
         cout << PLAYER_WON << " Blackjack!" << endl;
         winnerChosen = true;
     }
-    if (playerHand.getHandValue() > 21)
+    else if (playerHand.getHandValue() > 21)
     {
         printHandBJ(compHand, computerHandMessage);
         cout << PLAYER_LOST << " Bust!" << endl;
         winnerChosen = true;
     }
-    
-    if (!winnerChosen)
+    else
     {
         while (compHand.getHandValue() < 17)
         {
@@ -225,7 +212,7 @@ void blackjack() {
         {
             cout << PLAYER_WON << endl;
         }
-        else if (compHand.getHandValue() == playerHand.getHandValue())
+        else
         {
             cout << "Stalemate!" << endl;
         }
@@ -384,6 +371,9 @@ void warGame() {
     WarHand playerHand(tempPlayerHand);
     WarHand compHand(tempCompHand);
 
+    tempPlayerHand.clear();
+    tempCompHand.clear();
+
     card playerCard;
     card compCard;
 
@@ -399,8 +389,8 @@ void warGame() {
 
         list<card> wonCards;
        
-        double playerVal = playerCard.value;
-        double compVal = compCard.value;
+        int playerVal = playerCard.value;
+        int compVal = compCard.value;
 
         wonCards.push_back(playerCard);
         wonCards.push_back(compCard);
@@ -408,27 +398,22 @@ void warGame() {
         if (playerVal > compVal)
         {
             playerHand.addCards(wonCards);
-            cout << "Player has " << playerHand.getTotalCards() << " cards.\n";
-            cout << "Computer has " << compHand.getTotalCards() << " cards.\n";
-            cout << endl;
-            cout << "Player has " << playerHand.getTotalValue() << " totalValue.\n";
-            cout << "Computer has " << compHand.getTotalValue() << " totalValue.\n";
-            cout << endl;
         }
         else if (playerVal < compVal)
         {
             compHand.addCards(wonCards);
-            cout << "Player has " << playerHand.getTotalCards() << " cards.\n";
-            cout << "Computer has " << compHand.getTotalCards() << " cards.\n";
-            cout << endl;
-            cout << "Player has " << playerHand.getTotalValue() << " total value.\n";
-            cout << "Computer has " << compHand.getTotalValue() << " total value.\n";
-            cout << endl;
         }
         else if (playerVal == compVal)
         {
             warInitiated(wonCards, playerHand, compHand);
         }
+        cout << endl;
+        cout << "Player has " << playerHand.getTotalCards() << " cards.\n";
+        cout << "Computer has " << compHand.getTotalCards() << " cards.\n";
+        cout << endl;
+        cout << "Player has " << playerHand.getTotalValue() << " totalValue.\n";
+        cout << "Computer has " << compHand.getTotalValue() << " totalValue.\n";
+        cout << endl;
         //string confirmation;
         //cout << "Type \"Y\" to continue: ";
         //cin >> confirmation;

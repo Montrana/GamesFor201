@@ -20,6 +20,6 @@ public:
 	void showCards();
 	int showFirstCard();
 	void resetValue();
-	bool makeAceLow();
+	void makeAceLow();
 };
 

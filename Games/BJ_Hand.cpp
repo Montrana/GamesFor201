@@ -78,8 +78,7 @@ void BJ_Hand::resetValue()
 /// <summary>
 /// changes the ace to be low
 /// </summary>
-/// <returns>if there was an ace that was changed</returns>
-bool BJ_Hand::makeAceLow()
+void BJ_Hand::makeAceLow()
 {
     for (int i = 0; i < hand.size(); i++)
     {
@@ -87,8 +86,7 @@ bool BJ_Hand::makeAceLow()
         {
             hand[i].value = 1;
 			resetValue();
-            return true;
         }
     }
-    return false;
+    
 }

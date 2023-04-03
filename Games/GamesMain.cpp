@@ -7,7 +7,7 @@
 /// <summary>
 /// Plays one of 5 games, blackjack, craps, hangman, and tictactoe;
 /// </summary>
-/// <returns></returns>
+/// <returns>An exit integer</returns>
 int main()
 {
     string gameChoice;
