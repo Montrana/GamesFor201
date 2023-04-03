@@ -1,6 +1,6 @@
 /// Name: Montana Nicholson
 /// Date: 3/17/2023
-/// This project is a combination of 5 games, Blackjack, Craps, Hangman, Tictactoe, and War
+/// GAMES FOR 201: This project is a combination of 5 games, Blackjack, Craps, Hangman, Tictactoe, and War
 
 #include "Games.h"
 #include "Deck.h"
@@ -38,15 +38,43 @@ int main()
         }
         else if (gameChoice[0] == 'C')
         {
+            double playerWorth = 50;
             do
             {
-                cout << endl;
-                craps();
+                double bet;
+                do
+                {
+                    cout << "Your net worth is $" << fixed << setprecision(2) << playerWorth << ". Please enter your bet: ";
+                    cin >> bet;
+                    cout << endl;
+                    if (bet > playerWorth)
+                    {
+                        cout << "You do not have that much money. Please adjust your bet.\n";
+                    }
+                } while (bet > playerWorth);
+                if (craps())
+                {
+                    playerWorth += bet;
+                }
+                else
+                {
+                    playerWorth -= bet;
+                }
+                cout << "You now have: $" << fixed << setprecision(2) << playerWorth << endl;
                 cout << "Would you like to play again (Y or N)? ";
                 cin >> playAgain;
                 playAgain[0] = toupper(playAgain[0]);
-            } while (playAgain[0] == 'Y');
-            
+            } while (playAgain[0] == 'Y' && playerWorth > 0);
+            cout << endl;
+            if (playerWorth <= 0 && playAgain[0] == 'Y')
+            {
+                cout << "You are out of money!!" << endl;
+            }
+            else
+            {
+                cout << "Thank you for playing. Your net worth is $" << fixed << setprecision(2) << playerWorth << endl;
+            }
+            cout << endl;
         }
         else if (gameChoice[0] == 'H')
         {

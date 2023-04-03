@@ -214,7 +214,7 @@ void blackjack() {
         }
         else
         {
-            cout << "Stalemate!" << endl;
+            cout << "Push!" << endl;
         }
     }
 }
@@ -223,13 +223,19 @@ void blackjack() {
 /// Plays Craps
 /// Most of this we did in class
 /// </summary>
-void craps() {
+bool craps() {
     srand(time(0));
     int dieSum = rollDie();
     if (dieSum == 7 || dieSum == 11)
+    {
         cout << PLAYER_WON << endl;
+        return true;
+    } 
     else if (dieSum == 2 || dieSum == 3 || dieSum == 12)
+    {
         cout << PLAYER_LOST << endl;
+        return false;
+    }
     else
     {
         int point = dieSum;
@@ -239,11 +245,13 @@ void craps() {
         } while (dieSum != 7 && dieSum != point);
         if (dieSum == 7)
         {
-            cout << PLAYER_LOST << endl;
+            cout << PLAYER_LOST;
+            return false;
         }
         else if (dieSum == point)
         {
-            cout << PLAYER_WON << endl;
+            cout << PLAYER_WON;
+            return true;
         }
     }
 }

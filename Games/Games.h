@@ -40,11 +40,11 @@ const char SUITS[4] = { HEART, DIAMOND, CLUB, SPADE };
 
 const int STANDARD_DECK_SIZE = 52;
 
-const string PLAYER_LOST = "You Lost!";
-const string PLAYER_WON = "You Won!";
+const string PLAYER_LOST = "You Lost! ";
+const string PLAYER_WON = "You Won! ";
 
 void blackjack();
-void craps();
+bool craps();
 void hangman();
 void ticTacToe();
 void warGame();
